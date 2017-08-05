@@ -72,20 +72,14 @@ public class ToDatabaseService {
 					// Parameters start with 1
 					preparedStatement.setString(1, (long) jsonobj_1.get("id"));
 					preparedStatement.setString(2, (String) jsonobj_1.get("First_name"));
-					
 					preparedStatement.setDouble(3, jsonobj_1.get("temp") == null ? 0.0 : (Double) jsonobj_1.get("temp));
-					
 					preparedStatement.executeUpdate();
-					
-
 				}
 
 			} catch (ParseException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 }
