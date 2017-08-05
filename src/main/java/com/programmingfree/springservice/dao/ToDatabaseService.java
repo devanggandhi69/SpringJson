@@ -1,5 +1,3 @@
-package com.programmingfree.springservice.dao;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -29,7 +27,7 @@ public class ToDatabaseService {
 		{
 			try {
 				URL url = null;
-				url = new URL("https://davids-restaurant.herokuapp.com/menu_items.json");
+				url = new URL("https://yourWebSite.com/Json_File.json");
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
 				conn.connect();
@@ -56,28 +54,29 @@ public class ToDatabaseService {
 				JSONParser parse = new JSONParser();
 
 				JSONObject jobj = (JSONObject) parse.parse(inline);
-				JSONArray jsonarr_1 = (JSONArray) jobj.get("menu_items");
+				JSONArray jsonarr_1 = (JSONArray) jobj.get("items");
 
 				System.out.println("After using Json parser");
 				System.out.println(jsonarr_1);
 				for (int i = 0; i < jsonarr_1.size(); i++) {
 					JSONObject jsonobj_1 = (JSONObject) jsonarr_1.get(i);
 
+					//If you have Null value you can use ternary operator
 					System.out.println("Elements ");
 					System.out.println(" id :" + jsonobj_1.get("id"));
-					System.out.println("short name :" + jsonobj_1.get("short_name"));
+					System.out.println("First name :" + jsonobj_1.get("First_name"));
+					System.out.println("Temp Value :" + jsonobj_1.get("temp"));
 					PreparedStatement preparedStatement = connection.prepareStatement(
-							"insert into menu_items(id,short_name,name,description,price_small,price_large,small_portion_name,large_portion_name) "
-									+ "values (?,?,?,?,?,?,?,?)");
+							"insert into items(id,First_name) "
+									+ "values (?,?,?)");
 					// Parameters start with 1
-					preparedStatement.setString(2, (String) jsonobj_1.get("short_name"));
-					preparedStatement.setString(3, (String) jsonobj_1.get("name"));
-					preparedStatement.setString(4, (String) jsonobj_1.get("description"));
-					preparedStatement.setDouble(5, jsonobj_1.get("price_small") == null ? 0.0 : (Double) jsonobj_1.get("price_small"));
-					preparedStatement.setDouble(6, (double) jsonobj_1.get("price_large"));
-					preparedStatement.setString(7, (String) jsonobj_1.get("small_portion_name"));
-					preparedStatement.setString(8, (String) jsonobj_1.get("large_portion_name"));
+					preparedStatement.setString(1, (long) jsonobj_1.get("id"));
+					preparedStatement.setString(2, (String) jsonobj_1.get("First_name"));
+					
+					preparedStatement.setDouble(3, jsonobj_1.get("temp") == null ? 0.0 : (Double) jsonobj_1.get("temp));
+					
 					preparedStatement.executeUpdate();
+					
 
 				}
 
